@@ -1,0 +1,223 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: "Nunito", sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    justify-content: space-between;
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    /* предотвращение горизонтальной прокрутки */
+}
+input:active,
+input:hover,
+input:focus {
+outline: none;
+}
+
+.nav-item a {
+    font-family: "Nunito", sans-serif;
+    color: white;
+    font-weight: 600;
+}
+
+.nav-item a:hover {
+    font-weight: 800;
+}
+
+.navbar-nav {
+    width: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar-brand {
+    font-size: 40px;
+}
+
+.nav-link {
+    font-size: 100px;
+}
+
+.navbar {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.navbar-nav .nav-link {
+    color: white !important;
+    margin-right: 20px;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 24px;
+    color: white !important;
+    font-family: "K2D", sans-serif;
+}
+
+.icon {
+    color: white;
+    margin-left: 15px;
+}
+
+.icons-container {
+    justify-content: center;
+    margin: 0px;
+    padding: 0px;
+}
+
+.search-container {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    display: none;
+    z-index: 1000;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 500;
+}
+
+.navbar {
+    height: max-content;
+}
+
+.auth-center{
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.auth-form{
+    height: max-content;
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    text-align: center;
+}
+.title-name p{
+    font-size: 4vh;
+    text-align: center;
+    margin-top: 40px;
+}
+.email{
+    margin-bottom: 20px;
+}
+.password{
+    margin-bottom: 20px;
+}
+.password-confirm{
+    margin-bottom: 40px;
+}
+.name-of-block p{
+    font-size: 3vh;
+}
+.input-field{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.input-field input{
+    color: #000000;
+    border: none;
+    border-bottom: 1px solid black;
+    width: 80%;
+    height: 56px;
+    font-size: 2vh;
+}
+.send{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.send-button{
+    width: 160px;
+    height: 50px;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #323232;
+    color: white;
+}
+.send-button-a {
+    text-decoration: none;
+    color: white;
+    margin-bottom: 30px;
+}
+.have-account{
+    text-align: center;
+    margin-top: 30px;
+}
+.have-account a{
+    color: black;
+    text-decoration: none;
+    border-bottom: 1px solid black;
+}
+.check{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 40px;
+}
+.remember-me{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.remember-me p{
+    font-size: 2vh;
+}
+#remember-me{
+    transform:scale(1.8);
+    opacity:0.9;
+    cursor:pointer;
+    margin-right: 20px;
+}
+.forgot-password a{
+    text-decoration: none;
+    color: black;
+    border-bottom: 1px solid black;
+}
+.backbutton a{
+    color: black;
+    text-decoration: none;
+    border-bottom: 1px solid black;
+}
+.backbutton{
+    margin-bottom: 30px; 
+}
