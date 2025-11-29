@@ -1,0 +1,173 @@
+from pydantic import BaseModel, EmailStr, Field, field_validator
+from datetime import datetime
+from typing import Optional, List
+from enum import Enum
+import re
+
+class Role(str, Enum):
+    user = "user"
+    admin = "admin"
+
+# Схема для регистрации нового пользователя
+class UserRegister(BaseModel):
+    email: EmailStr
+    password: str = Field(min_length=6, max_length=800)
+    last_name: str = Field(min_length=1, max_length=43, strip_whitespace=True)
+    first_name: str = Field(min_length=1, max_length=30, strip_whitespace=True)
+    patronymic: Optional[str] = Field(None, max_length=30, strip_whitespace=True)
+    phone: Optional[str] = Field(None, min_length=10, max_length=20)
+
+    @field_validator('password')
+    @classmethod
+    def validate_password_strength(cls, v: str) -> str:
+        if not any(char.isdigit() for char in v):
+            raise ValueError('Пароль должен содержать хотя бы одну цифру')
+        if not any(char.isalpha() for char in v):
+            raise ValueError('Пароль должен содержать хотя бы одну букву')
+        return v
+
+    @field_validator('phone')
+    @classmethod
+    def validate_phone_format(cls, v: Optional[str]) -> Optional[str]:
+        if v and not re.match(r'^\+?[1-9]\d{1,14}$', v):
+            raise ValueError('Номер телефона должен быть в международном формате')
+        return v
+
+    @field_validator('first_name', 'last_name', 'patronymic')
+    @classmethod
+    def validate_name_chars(cls, v: Optional[str]) -> Optional[str]:
+        if v and not re.match(r'^[a-zA-Zа-яА-ЯёЁ\s\-]+$', v):
+            raise ValueError('Имя может содержать только буквы, пробелы и дефисы')
+        return v
+
+# Схема для входа пользователя в систему
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str = Field(min_length=6, max_length=40)
+
+# Схема для изменения пароля пользователя
+class ChangePassword(BaseModel):
+    email: EmailStr
+    current_password: str = Field(min_length=6, max_length=40)
+    new_password: str = Field(min_length=6, max_length=40)
+
+    @field_validator('new_password')
+    @classmethod
+    def validate_new_password_strength(cls, v: str) -> str:
+        if not any(char.isdigit() for char in v):
+            raise ValueError('Новый пароль должен содержать хотя бы одну цифру')
+        if not any(char.isalpha() for char in v):
+            raise ValueError('Новый пароль должен содержать хотя бы одну букву')
+        return v
+    
+# Схема для возврата JWT токена
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+# Схема пользователя
+class UserBase(BaseModel):
+    email: EmailStr
+    first_name: str = Field(min_length=1, max_length=30, strip_whitespace=True)
+    last_name: str = Field(min_length=1, max_length=43, strip_whitespace=True)
+    patronymic: Optional[str] = Field(None, max_length=30, strip_whitespace=True)
+    phone: Optional[str] = Field(None, min_length=10, max_length=20)
+
+    @field_validator('phone')
+    @classmethod
+    def validate_phone_format(cls, v: Optional[str]) -> Optional[str]:
+        if v and not re.match(r'^\+?[1-9]\d{1,14}$', v):
+            raise ValueError('Номер телефона должен быть в международном формате')
+        return v
+
+    @field_validator('first_name', 'last_name', 'patronymic')
+    @classmethod
+    def validate_name_chars(cls, v: Optional[str]) -> Optional[str]:
+        if v and not re.match(r'^[a-zA-Zа-яА-ЯёЁ\s\-]+$', v):
+            raise ValueError('Имя может содержать только буквы, пробелы и дефисы')
+        return v
+
+# Схема для создания пользователя
+class UserCreate(UserBase):
+    password: str = Field(min_length=6, max_length=40)
+
+    @field_validator('password')
+    @classmethod
+    def validate_password_strength(cls, v: str) -> str:
+        if not any(char.isdigit() for char in v):
+            raise ValueError('Пароль должен содержать хотя бы одну цифру')
+        if not any(char.isalpha() for char in v):
+            raise ValueError('Пароль должен содержать хотя бы одну букву')
+        return v
+
+# Схема для обновления данных пользователя
+class UserUpdate(BaseModel):
+    email: Optional[EmailStr] = None
+    first_name: Optional[str] = Field(None, min_length=1, max_length=30, strip_whitespace=True)
+    last_name: Optional[str] = Field(None, min_length=1, max_length=43, strip_whitespace=True)
+    patronymic: Optional[str] = Field(None, max_length=30, strip_whitespace=True)
+    phone: Optional[str] = Field(None, min_length=10, max_length=20)
+
+    @field_validator('phone')
+    @classmethod
+    def validate_phone_format(cls, v: Optional[str]) -> Optional[str]:
+        if v and not re.match(r'^\+?[1-9]\d{1,14}$', v):
+            raise ValueError('Номер телефона должен быть в международном формате')
+        return v
+
+    @field_validator('first_name', 'last_name', 'patronymic')
+    @classmethod
+    def validate_name_chars(cls, v: Optional[str]) -> Optional[str]:
+        if v and not re.match(r'^[a-zA-Zа-яА-ЯёЁ\s\-]+$', v):
+            raise ValueError('Имя может содержать только буквы, пробелы и дефисы')
+        return v
+
+# Схема пользователя для ответов
+class User(UserBase):
+    id: int = Field(gt=0)
+    role: Role
+    registration_date: datetime
+
+    class Config:
+        from_attributes = True
+
+# Схема расширенного профиля пользователя
+class UserProfile(User):
+    addresses: List['UserAddress'] = []
+    #orders_count: int = Field(ge=0, default=0)
+    #reviews_count: int = Field(ge=0, default=0)
+
+# Схема адреса
+class UserAddressBase(BaseModel):
+    country: str = Field(min_length=3, max_length=63, strip_whitespace=True)
+    city: str = Field(min_length=1, max_length=179, strip_whitespace=True)
+    street: str = Field(min_length=2, max_length=58, strip_whitespace=True)
+    house_number: str = Field(min_length=1, max_length=20, strip_whitespace=True)
+    entrance: Optional[int] = Field(None, ge=1, le=120)
+    is_current: bool = True
+
+    @field_validator('country', 'city', 'street')
+    @classmethod
+    def validate_address_chars(cls, v: str) -> str:
+        if not re.match(r'^[a-zA-Zа-яА-ЯёЁ0-9\s\-\.,]+$', v):
+            raise ValueError('Поля адреса могут содержать только буквы, цифры, пробелы, дефисы и запятые')
+        return v
+
+    @field_validator('house_number')
+    @classmethod
+    def validate_house_number(cls, v: str) -> str:
+        if not re.match(r'^[a-zA-Zа-яА-ЯёЁ0-9/\-\s]+$', v):
+            raise ValueError('Номер дома может содержать только буквы, цифры, пробелы, дефисы и слэши')
+        return v
+
+# Схема для создания адреса
+class UserAddressCreate(UserAddressBase):
+    pass
+
+# Схема адреса для ответов
+class UserAddress(UserAddressBase):
+    id: int = Field(gt=0)
+    user_id: int = Field(gt=0)
+
+    class Config:
+        from_attributes = True
