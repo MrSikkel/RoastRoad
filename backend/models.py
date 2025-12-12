@@ -39,9 +39,9 @@ class User(Base):
     registration_date = Column(DateTime, default=func.now())
     
     addresses = relationship("User_address", back_populates="user")
-    #reviews = relationship("Review", back_populates="user")
-    #articles = relationship("Article", back_populates="author")
-    #comments = relationship("Article_comment", back_populates="user")
+    reviews = relationship("Review", back_populates="user")
+    articles = relationship("Article", back_populates="author")
+    comments = relationship("Article_comment", back_populates="user")
     #cart = relationship("Cart", back_populates="user", uselist=False)
     #orders = relationship("Order", back_populates="user")
 
@@ -61,7 +61,7 @@ class User_address(Base):
     user = relationship("User", back_populates="addresses")
     #orders = relationship("Order", back_populates="address")
 
-"""
+
 # Товар
 class Product(Base):
     __tablename__ = "product"
@@ -70,16 +70,18 @@ class Product(Base):
     name = Column(String(255), nullable=False)
     description = Column(Text)
     price = Column(DECIMAL(7, 2), nullable=False)
-    category_id = Column(Integer, ForeignKey("product_category.id"), nullable=False, index=True)
+    #category_id = Column(Integer, ForeignKey("product_category.id"), nullable=False, index=True)
+    category_id = Column(Integer, ForeignKey("product_category.id"), nullable=True, index=True)
     images = Column(JSON)
     specifications = Column(Text)
     created_at = Column(DateTime, default=func.now())
     
-    category = relationship("Product_category", back_populates="products")
+    #category = relationship("Product_category", back_populates="products")
+    category = relationship("Product_category", back_populates="products", lazy="select")
     reviews = relationship("Review", back_populates="product")
-    cart_items = relationship("Cart_item", back_populates="product")
-    order_items = relationship("Order_item", back_populates="product")
-    
+    #cart_items = relationship("Cart_item", back_populates="product")
+    #order_items = relationship("Order_item", back_populates="product")
+    """
     def get_specifications(self):
         if self.specifications:
             try:
@@ -110,8 +112,8 @@ class Product(Base):
         #Удалить изображение
         if self.images and image_url in self.images:
             self.images.remove(image_url)
+    """
 
-    
 # Категории товаров
 class Product_category(Base):
     __tablename__ = "product_category"
@@ -122,7 +124,7 @@ class Product_category(Base):
     created_at = Column(DateTime, default=func.now())
 
     products = relationship("Product", back_populates="category")
-    
+
 # Отзывы
 class Review(Base):
     __tablename__ = "review"
@@ -154,7 +156,7 @@ class Article(Base):
     
     author = relationship("User", back_populates="articles")
     comments = relationship("Article_comment", back_populates="article")
-    
+    """
     def get_images(self):
         #Получить изображения как Python список
         return self.images or []
@@ -162,6 +164,7 @@ class Article(Base):
     def get_tags(self):
         #Получить теги как Python список
         return self.tags or []
+    """
 
 # Комментарии к статье
 class Article_comment(Base):
@@ -175,8 +178,8 @@ class Article_comment(Base):
     
     user = relationship("User", back_populates="comments")
     article = relationship("Article", back_populates="comments")
-  
-  
+
+""" 
 # Корзина
 class Cart(Base):
     __tablename__ = "cart"

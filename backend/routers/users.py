@@ -1,77 +1,82 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from database import get_db
 from schemas import UserProfile, UserAddress, UserAddressCreate, UserUpdate
-from crud.users import get_user_profile, create_user_address, get_user_by_email, update_user_profile
+from crud.users import get_user_profile, create_user_address, get_user_addresses, update_user_profile
 from models import User_address
+from auth import get_current_user
 
 router = APIRouter(prefix="/users", tags=["users"])
 
 # Эндпоинт для получения профиля пользователя по email
 @router.get("/lk", response_model=UserProfile)
-def get_profile_by_email(
-    email: str = Query(...),
-    db: Session = Depends(get_db)
-):
+def get_profile(current_user = Depends(get_current_user), db: Session = Depends(get_db)):
     try:
-        user = get_user_by_email(db, email)
-        if not user:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Пользователь не найден"
-            )
-        
-        profile = get_user_profile(db, user.id)
+        profile = get_user_profile(db, current_user.id)
         return profile
     
     except HTTPException:
         raise
+    
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Ошибка при получении профиля: {str(e)}"
         )
-        
-        
+
+# Эндпоинт для обновления профиля текущего пользователя
 @router.put("/profile", response_model=UserProfile)
 def update_profile(
     user_data: UserUpdate,
-    email: str = Query(...),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
-):
+    ):
+    
     try:
-        updated_user = update_user_profile(db, email, user_data)
-
+        updated_user = update_user_profile(db, current_user.id, user_data)
         profile = get_user_profile(db, updated_user.id)
         return profile
     
     except HTTPException:
         raise
+    
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Ошибка при обновлении профиля: {str(e)}"
         )
 
+# Эндпоинт для получение адресов пользователя
+@router.get("/addresses", response_model=list[UserAddress])
+def get_addresses(
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+    ):
+    
+    try:
+        addresses = get_user_addresses(db, current_user.id)
+        return addresses
+    
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Ошибка при получении адресов: {str(e)}"
+        )
+
 # Эндпоинт для создания нового адреса пользователя
 @router.post("/addresses", response_model=UserAddress, status_code=status.HTTP_201_CREATED)
-def create_address_for_user(
+def create_address(
     address: UserAddressCreate,
-    email: str = Query(...),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
-):
+    ):
+    
     try:
-        user = get_user_by_email(db, email)
-        if not user:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Пользователь не найден"
-            )
-        
-        return create_user_address(db, address, user.id)
+        return create_user_address(db, address, current_user.id)
     
     except HTTPException:
         raise
+    
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -80,21 +85,15 @@ def create_address_for_user(
 
 # Эндпоинт для удаления адреса пользователя
 @router.delete("/addresses/{address_id}")
-def delete_address_by_email(
+def delete_address(
     address_id: int,
-    email: str = Query(...),
+    current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
-):
+    ):
+    
     try:
-        user = get_user_by_email(db, email)
-        if not user:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Пользователь не найден"
-            )
-        
         address = db.query(User_address).filter(
-            User_address.user_id == user.id,
+            User_address.user_id == current_user.id,
             User_address.id == address_id
         ).first()
         
@@ -112,6 +111,7 @@ def delete_address_by_email(
     except HTTPException:
         db.rollback()
         raise
+    
     except Exception as e:
         db.rollback()
         raise HTTPException(
