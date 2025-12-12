@@ -62,18 +62,18 @@
                 <div class="title-name"><p>Регистрация</p></div>
             
                 <div class="email">
-                    <div class="input-field"><input type="email" placeholder="Email"></div>
+                    <div class="input-field"><input id="reg-email" type="email" placeholder="Email"></div>
                 </div>
                 
                 <div class="password">
-                    <div class="input-field"><input type="password" placeholder="Пароль"></div>
+                    <div class="input-field"><input id="reg-password" type="password" placeholder="Пароль"></div>
                 </div>
     
                 <div class="password-confirm">
                     <div class="input-field"><input type="password" placeholder="Подтвердите пароль"></div>
                 </div>
                 <div class="send">
-                    <a href="#" class="send-button-a"><div class="send-button">Регистрация</div></a>
+                    <button id="reg-btn" class="send-button">Регистрация</button>
                 </div>
                 <div class="have-account">
                     <a href="/html's/auth.html">Уже есть аккаунт? <br> Авторизуйтесь</a>
@@ -82,6 +82,7 @@
         </div>
     </div>
 
+    <div id="reg-message" class="reg-message"></div>
 
 
 
@@ -99,7 +100,7 @@
 
 
 
-
+    <script src="../js/register.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

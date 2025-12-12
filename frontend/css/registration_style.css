@@ -221,3 +221,19 @@ outline: none;
 .backbutton{
     margin-bottom: 30px; 
 }
+
+
+.reg-message {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+    display: none; 
+}
+
+.reg-message.success {
+    color: green;
+}
+
+.reg-message.error {
+    color: red;
+}
