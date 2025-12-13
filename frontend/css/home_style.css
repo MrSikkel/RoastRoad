@@ -330,7 +330,7 @@ outline: none;
 }
 #article1{
     position: relative;
-    background-image: url(/img/articleback1.png);
+    background-image: url(../img/articleback1.png);
     background-position: center;
     background-size: cover;
     background-blend-mode: multiply;
@@ -338,7 +338,7 @@ outline: none;
 }
 #article2{
     position: relative;
-    background-image: url(/img/articleback2.png);
+    background-image: url(../img/articleback2.png);
     background-position: center;
     background-size: cover;
     background-blend-mode: multiply;
@@ -346,7 +346,7 @@ outline: none;
 }
 #article3{
     position: relative;
-    background-image: url(/img/articleback3.png);
+    background-image: url(../img/articleback3.png);
     background-position: center;
     background-size: cover;
     background-blend-mode: multiply;
@@ -354,7 +354,7 @@ outline: none;
 }
 #article4{
     position: relative;
-    background-image: url(/img/articleback4.png);
+    background-image: url(../img/articleback4.png);
     background-position: center;
     background-size: cover;
     background-blend-mode: multiply;
