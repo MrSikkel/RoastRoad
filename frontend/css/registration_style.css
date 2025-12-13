@@ -125,6 +125,7 @@ outline: none;
     justify-content: space-evenly;
     flex-direction: column;
     text-align: center;
+    padding: 50px;
 }
 .title-name p{
     font-size: 4vh;
