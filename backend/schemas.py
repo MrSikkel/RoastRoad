@@ -56,7 +56,7 @@ class UserRegister(BaseModel):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str = Field(min_length=6, max_length=40)
-    
+
 # Схема для изменения пароля пользователя
 class ChangePassword(BaseModel):
     current_password: str = Field(min_length=6, max_length=40)

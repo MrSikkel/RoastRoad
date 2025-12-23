@@ -61,7 +61,6 @@ def login(
             detail=f"Ошибка входа в систему: {str(e)}"
         )
 
-# Эндпоинты для входа пользователя в систему (json)
 @router.post("/login-json", response_model=Token)
 def login_json(
     login_data: UserLogin,
