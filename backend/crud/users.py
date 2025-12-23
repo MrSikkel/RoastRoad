@@ -40,8 +40,8 @@ def create_user(db: Session, user_data: UserRegister) -> User:
         db_user = User(
             email=user_data.email,
             password_hash=hashed_password,
-            last_name=user_data.last_name,
-            first_name=user_data.first_name,
+            last_name=user_data.last_name or "",
+            first_name=user_data.first_name or "",
             patronymic=user_data.patronymic,
             phone=user_data.phone
         )

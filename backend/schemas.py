@@ -20,8 +20,8 @@ class Role(str, Enum):
 class UserRegister(BaseModel):
     email: EmailStr
     password: str = Field(min_length=6, max_length=40)
-    last_name: str = Field(min_length=1, max_length=43, strip_whitespace=True)
-    first_name: str = Field(min_length=1, max_length=30, strip_whitespace=True)
+    last_name: Optional[str] = Field(None, min_length=1, max_length=43, strip_whitespace=True)
+    first_name: Optional[str] = Field(None, min_length=1, max_length=30, strip_whitespace=True)
     patronymic: Optional[str] = Field(None, max_length=30, strip_whitespace=True)
     phone: Optional[str] = Field(None, min_length=10, max_length=20)
 
@@ -37,6 +37,8 @@ class UserRegister(BaseModel):
     @field_validator('phone')
     @classmethod
     def validate_phone_format(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return v
         if v and not re.match(r'^\+?[1-9]\d{1,14}$', v):
             raise ValueError('Номер телефона должен быть в международном формате')
         return v
@@ -44,6 +46,8 @@ class UserRegister(BaseModel):
     @field_validator('first_name', 'last_name', 'patronymic')
     @classmethod
     def validate_name_chars(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return v
         if v and not re.match(r'^[a-zA-Zа-яА-ЯёЁ\s\-]+$', v):
             raise ValueError('Имя может содержать только буквы, пробелы и дефисы')
         return v
@@ -52,7 +56,7 @@ class UserRegister(BaseModel):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str = Field(min_length=6, max_length=40)
-
+    
 # Схема для изменения пароля пользователя
 class ChangePassword(BaseModel):
     current_password: str = Field(min_length=6, max_length=40)

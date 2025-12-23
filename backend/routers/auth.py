@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from datetime import timedelta
 from database import get_db
-from schemas import UserRegister, Token, ChangePassword
+from schemas import UserRegister, Token, ChangePassword, UserLogin
 from crud.users import create_user, authenticate_user, update_user_password
 from auth import create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
 
@@ -37,6 +37,38 @@ def login(
     
     try:
         user = authenticate_user(db, form_data.username, form_data.password)
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Неверный адрес электронной почты или пароль"
+            )
+        
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": str(user.id)}, expires_delta=access_token_expires
+        )
+        return {
+            "access_token": access_token, 
+            "token_type": "bearer"
+        }
+    
+    except HTTPException:
+        raise
+    
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Ошибка входа в систему: {str(e)}"
+        )
+
+# Эндпоинты для входа пользователя в систему (json)
+@router.post("/login-json", response_model=Token)
+def login_json(
+    login_data: UserLogin,
+    db: Session = Depends(get_db)
+    ):
+    try:
+        user = authenticate_user(db, login_data.email, login_data.password)
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
