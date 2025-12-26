@@ -115,7 +115,17 @@
 .place-btn {
     padding: 200px;
 }
+#new-address-fields {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.4s ease, max-height 0.4s ease;
+}
 
+#new-address-fields.show {
+    opacity: 1;
+    max-height: 600px;
+}
 .delivery-info {
     margin-top: 50px;
     border: 1px solid black;
@@ -172,10 +182,18 @@
     border: 2px solid rgb(0, 0, 0);
 }
 
-.more-adress-info {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+#new-address-fields {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.4s ease, max-height 0.4s ease;
+    margin-top: 0 !important; /* перебиваем любой margin */
+}
+
+#new-address-fields.show {
+    opacity: 1;
+    max-height: 600px;
+    margin-top: 1.5rem; /* ~24px — нормальный отступ сверху при открытии */
 }
 
 .payment-info {
@@ -186,4 +204,12 @@
 
 .type-of-payment {
     margin-right: 11px;
+}
+.cart-item {
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.cart-item.removing {
+    opacity: 0;
+    transform: translateY(-20px);
 }

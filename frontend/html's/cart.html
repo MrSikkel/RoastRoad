@@ -62,7 +62,7 @@
         <p class="cart-title">Оформление заказа</p>
         <div class="cart row">
             <div class="cart-items-group col-lg-7 col-md-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="cart-item shadow">
+                <div class="cart-item shadow" data-price="3119">
                     <a href="" class="cart-item-delete col-lg-1"><i class="fa-solid fa-trash fa-2xl"></i></a>
                     <img src="../img/acessorypic3.png" alt="" class="col-lg-2">
                     <div class="cart-item-name col-lg-3">
@@ -71,12 +71,12 @@
                     </div>
                     <div class="add-count border col-lg-2">
                         <div class="minus">-</div>
-                        <div class="count">1</div>
+                        <div class="count" data-count="1">1</div>
                         <div class="add">+</div>
                     </div>
                     <div class="price col-lg-2">3119 руб.</div>
                 </div>
-                <div class="cart-item shadow">
+                <div class="cart-item shadow" data-price="899">
                     <a href="" class="cart-item-delete col-lg-1"><i class="fa-solid fa-trash fa-2xl"></i></a>
                     <img src="../img/coffepack1.png" alt="" class="col-lg-2">
                     <div class="cart-item-name col-lg-3">
@@ -85,12 +85,12 @@
                     </div>
                     <div class="add-count border col-lg-2">
                         <div class="minus">-</div>
-                        <div class="count">1</div>
+                        <div class="count" data-count="1">1</div>
                         <div class="add">+</div>
                     </div>
                     <div class="price col-lg-2">899 руб.</div>
                 </div>
-                <div class="cart-item shadow">
+                <div class="cart-item shadow" data-price="1100">
                     <a href="" class="cart-item-delete col-lg-1"><i class="fa-solid fa-trash fa-2xl"></i></a>
                     <img src="../img/coffepack2.png" alt="" class="col-lg-2">
                     <div class="cart-item-name col-lg-3">
@@ -99,11 +99,14 @@
                     </div>
                     <div class="add-count border col-lg-2">
                         <div class="minus">-</div>
-                        <div class="count">1</div>
+                        <div class="count" data-count="1">1</div>
                         <div class="add">+</div>
                     </div>
                     <div class="price col-lg-2">1100 руб.</div>
                 </div>
+                <div class="clear-cart mt-3">
+                    <button id="clear-cart-btn" class="btn btn-outline-danger" style="margin-bottom: 40px;">Очистить корзину</button>
+                 </div> 
             </div>
                                                         <!--Итоговая стоимость-->
             <div class="price-items-group col-lg-4">
@@ -132,22 +135,39 @@
         <div class="delivery-info border">
             <div class="title-of-block">Доставка</div>
             <div class="personal-info">
-                <p>Выберите из списка или добавьте новый</p>
-                <div class="existing-one">
-                    <input type="radio" name="existing" checked id="" class="radio"> г.Томск, ул. Советская, д.22, кв.10
-                </div>
-                <div class="existing-one">
-                    <input type="radio" name="existing" id="" class="radio"> Добавить новый адрес
-                </div>
-                <div class="col-lg-10">
-                    <input type="text" name="" id="" placeholder="Адрес доставки" class="personal-input">
-                </div>
-                <div class="col-lg-10 more-adress-info">
-                    <div class="col-lg-3"><input type="text" name="" id="" placeholder="Подьезд" class="personal-input"></div>
-                    <div class="col-lg-1"></div>
-                    <div class="col-lg-3"><input type="text" name="" id="" placeholder="Этаж" class="personal-input"></div>
-                    <div class="col-lg-1"></div>
-                    <div class="col-lg-3"><input type="text" name="" id="" placeholder="Квартира" class="personal-input"></div>
+    <!-- Существующие адреса будут добавляться сюда динамически -->
+    <div class="existing-one">
+        <input type="radio" name="address" id="existing-address" class="radio" checked>
+        <label for="existing-address">г. Томск, ул. Советская, д. 10, подъезд 1, этаж 5, кв. 25</label>
+    </div>
+
+    <div class="existing-one">
+        <input type="radio" name="address" id="new-address-radio" class="radio">
+        <label for="new-address-radio">Добавить новый адрес</label>
+    </div>
+
+    <!-- Поля нового адреса -->
+                <div id="new-address-fields">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <input type="text" placeholder="Город" class="personal-input" data-field="city">
+                        </div>
+                        <div class="col-12">
+                            <input type="text" placeholder="Улица" class="personal-input" data-field="street">
+                        </div>
+                        <div class="col-lg-4 col-12">
+                            <input type="text" placeholder="Дом" class="personal-input" data-field="house">
+                        </div>
+                        <div class="col-lg-4 col-12">
+                            <input type="text" placeholder="Подъезд" class="personal-input" data-field="entrance">
+                        </div>
+                        <div class="col-lg-4 col-12">
+                            <input type="text" placeholder="Этаж" class="personal-input" data-field="floor">
+                        </div>
+                        <div class="col-lg-4 col-12">
+                            <input type="text" placeholder="Квартира" class="personal-input" data-field="apartment">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>   
@@ -168,8 +188,9 @@
                     Система быстрых платежей
                 </div>
             </div>
-        </div>                          
+        </div>                         
     </div>
+    
 
     <div class="footer" id="footer">
         <div class="container ">
@@ -195,7 +216,13 @@
             </div>
         </div>
     </div>
-
+        <!-- Toast Container -->
+    <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1100;">
+        <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body"></div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

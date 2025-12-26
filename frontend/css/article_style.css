@@ -162,7 +162,7 @@ input:focus {
 .presentation-picture {
     width: 100%;
     height: 60vh;
-    background-image: url(/img/article-main-pic.png);
+    background-image: url(../img/article-main-pic.png);
     margin-bottom: 50px;
     background-position: center;
     background-size: cover;
@@ -235,7 +235,7 @@ input:focus {
 
 #article2 {
     position: relative;
-    background-image: url(/img/articleback2.png);
+    background-image: url(../img/articleback2.png);
     background-position: center;
     background-size: cover;
     background-blend-mode: multiply;
