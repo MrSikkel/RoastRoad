@@ -1,0 +1,49 @@
+.categories {
+    display: flex;
+    flex-direction: row;
+    height: max-content;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 100px;
+    margin-bottom: 50px;
+}
+
+.categories-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.item-name {
+    font-size: 3vh;
+    font-weight: 800;
+    margin-top: 20px;
+}
+
+.categories-item img {
+    width: 100px;
+}
+
+.item-size {
+    width: 23%;
+    text-decoration: none;
+    color: black;
+}
+
+.item-size:hover {
+    background-color: rgb(252, 252, 252);
+}
+
+.offers-name {
+    font-size: 2vh;
+    font-weight: 800;
+}
+
+.offer-items {
+    margin-bottom: 10px;
+}
+
+.offers {
+    margin-bottom: 100px;
+}
