@@ -6,7 +6,6 @@ from fastapi import HTTPException, status
 import json
 from decimal import Decimal
 
-# Функция для получения продуктов
 def get_products(db: Session, skip: int = 0, limit: int = 10) -> List[Product]:
     try:
         return db.query(Product).order_by(Product.created_at.desc()).offset(skip).limit(limit).all()
@@ -14,7 +13,6 @@ def get_products(db: Session, skip: int = 0, limit: int = 10) -> List[Product]:
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-# Функция для получения продукта по id
 def get_product_by_id(db: Session, product_id: int) -> Optional[Product]:
     try:
         return db.query(Product).filter(Product.id == product_id).first()
@@ -22,7 +20,6 @@ def get_product_by_id(db: Session, product_id: int) -> Optional[Product]:
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-# Функция для создания нового продукта
 def create_product(db: Session, product_data: ProductCreate) -> Product:
     try:
         specifications = product_data.specifications
@@ -51,7 +48,6 @@ def create_product(db: Session, product_data: ProductCreate) -> Product:
         db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Ошибка создания продукта: {str(e)}")
 
-# Функция для обновления данных продукта по id
 def update_product(db: Session, product_id: int, product_data: ProductUpdate) -> Product:
     try:
         product = get_product_by_id(db, product_id)
@@ -84,7 +80,6 @@ def update_product(db: Session, product_id: int, product_data: ProductUpdate) ->
         db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-# Функция для удаления продукта по id
 def delete_product(db: Session, product_id: int):
     try:
         product = get_product_by_id(db, product_id)

@@ -3,7 +3,6 @@ from database import Base
 from sqlalchemy.orm import relationship
 import enum
 
-# Роли для пользователя
 class Role(enum.Enum):
     user = "user"
     admin = "admin"
@@ -23,8 +22,6 @@ class Order_status(enum.Enum):
     delivered = "delivered"
     cancelled = "cancelled"
 """
-
-# Пользователь
 class User(Base):
     __tablename__ = "user"
     
@@ -45,7 +42,6 @@ class User(Base):
     #cart = relationship("Cart", back_populates="user", uselist=False)
     #orders = relationship("Order", back_populates="user")
 
-# Адрес клиента
 class User_address(Base):
     __tablename__ = "user_address"
     
@@ -62,7 +58,6 @@ class User_address(Base):
     #orders = relationship("Order", back_populates="address")
 
 
-# Товар
 class Product(Base):
     __tablename__ = "product"
     
@@ -114,7 +109,6 @@ class Product(Base):
             self.images.remove(image_url)
     """
 
-# Категории товаров
 class Product_category(Base):
     __tablename__ = "product_category"
     
@@ -125,7 +119,6 @@ class Product_category(Base):
 
     products = relationship("Product", back_populates="category")
 
-# Отзывы
 class Review(Base):
     __tablename__ = "review"
     
@@ -140,7 +133,6 @@ class Review(Base):
     product = relationship("Product", back_populates="reviews")
 
 
-# Статья
 class Article(Base):
     __tablename__ = "article"
     
@@ -166,7 +158,6 @@ class Article(Base):
         return self.tags or []
     """
 
-# Комментарии к статье
 class Article_comment(Base):
     __tablename__ = "article_comment"
     

@@ -5,7 +5,6 @@ from schemas import ArticleCreate, ArticleUpdate
 from fastapi import HTTPException, status
 import json
 
-# Функция для получение последних 4-ёх статей
 def get_latest_articles(db: Session, limit: int = 4) -> List[Article]:
     try:
         return db.query(Article).order_by(Article.created_at.desc()).limit(limit).all()
@@ -13,7 +12,6 @@ def get_latest_articles(db: Session, limit: int = 4) -> List[Article]:
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-# Функция для получения статьи по id
 def get_article_by_id(db: Session, article_id: int) -> Optional[Article]:
     try:
         return db.query(Article).filter(Article.id == article_id).first()
@@ -21,7 +19,6 @@ def get_article_by_id(db: Session, article_id: int) -> Optional[Article]:
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-# Функция для создания статьи
 def create_article(db: Session, article_data: ArticleCreate, author_id: int) -> Article:
     try:
         images = article_data.images
@@ -51,7 +48,6 @@ def create_article(db: Session, article_data: ArticleCreate, author_id: int) -> 
         db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-# Функция для обнавления данныз статьи
 def update_article(db: Session, article_id: int, article_data: ArticleUpdate) -> Article:
     try:
         article = get_article_by_id(db, article_id)
@@ -81,7 +77,6 @@ def update_article(db: Session, article_id: int, article_data: ArticleUpdate) ->
         db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-# Функция для удаления статьи по id
 def delete_article(db: Session, article_id: int):
     try:
         article = get_article_by_id(db, article_id)

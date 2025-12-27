@@ -16,7 +16,6 @@ class Role(str, Enum):
     user = "user"
     admin = "admin"
 
-# Схема для регистрации нового пользователя
 class UserRegister(BaseModel):
     email: EmailStr
     password: str = Field(min_length=6, max_length=40)
@@ -52,12 +51,10 @@ class UserRegister(BaseModel):
             raise ValueError('Имя может содержать только буквы, пробелы и дефисы')
         return v
 
-# Схема для входа пользователя в систему
 class UserLogin(BaseModel):
     email: EmailStr
     password: str = Field(min_length=6, max_length=40)
 
-# Схема для изменения пароля пользователя
 class ChangePassword(BaseModel):
     current_password: str = Field(min_length=6, max_length=40)
     new_password: str = Field(min_length=6, max_length=40)
@@ -71,12 +68,10 @@ class ChangePassword(BaseModel):
             raise ValueError('Новый пароль должен содержать хотя бы одну букву')
         return v
     
-# Схема для возврата JWT токена
 class Token(BaseModel):
     access_token: str
     token_type: str
 
-# Схема пользователя
 class UserBase(BaseModel):
     email: EmailStr
     last_name: str = Field(min_length=1, max_length=43, strip_whitespace=True)
@@ -111,7 +106,6 @@ class UserCreate(UserBase):
             raise ValueError('Пароль должен содержать хотя бы одну букву')
         return v
 """
-# Схема для обновления данных пользователя
 class UserUpdate(BaseModel):
     email: Optional[EmailStr] = None
     last_name: Optional[str] = Field(None, min_length=1, max_length=43, strip_whitespace=True)
@@ -133,7 +127,6 @@ class UserUpdate(BaseModel):
             raise ValueError('Имя может содержать только буквы, пробелы и дефисы')
         return v
 
-# Схема пользователя для ответов
 class User(UserBase):
     id: int = Field(gt=0)
     role: Role
@@ -142,13 +135,11 @@ class User(UserBase):
     class Config:
         from_attributes = True
 
-# Схема расширенного профиля пользователя
 class UserProfile(User):
     addresses: List['UserAddress'] = []
     #orders_count: int = Field(ge=0, default=0)
     #reviews_count: int = Field(ge=0, default=0)
 
-# Схема адреса
 class UserAddressBase(BaseModel):
     country: str = Field(min_length=2, max_length=63, strip_whitespace=True)
     city: str = Field(min_length=1, max_length=179, strip_whitespace=True)
@@ -171,11 +162,9 @@ class UserAddressBase(BaseModel):
             raise ValueError('Номер дома может содержать только буквы, цифры, пробелы, дефисы и слэши')
         return v
 
-# Схема для создания адреса
 class UserAddressCreate(UserAddressBase):
     pass
 
-# Схема адреса для ответов
 class UserAddress(UserAddressBase):
     id: int = Field(gt=0)
     user_id: int = Field(gt=0)
@@ -183,7 +172,6 @@ class UserAddress(UserAddressBase):
     class Config:
         from_attributes = True
 
-# Схема товара
 class ProductBase(BaseModel):
     name: str = Field(min_length=1, max_length=255)
     description: Optional[str] = None
@@ -220,16 +208,13 @@ class ProductBase(BaseModel):
                 return []
         return []
 
-# Схема для создания нового товара
 class ProductCreate(ProductBase):
     pass
 
-# Схема для обновления данных товара
 class ProductUpdate(ProductBase):
     name: Optional[str] = None
     price: Optional[Decimal] = None
 
-# Схема товара для ответа    
 class ProductOut(BaseModel):
     id: int
     #name: str
@@ -243,7 +228,6 @@ class ProductOut(BaseModel):
     class Config:
         from_attributes = True
         
-# Схема статьи
 class ArticleBase(BaseModel):
     name: str = Field(min_length=1, max_length=255)
     short_description: str
@@ -265,11 +249,9 @@ class ArticleBase(BaseModel):
                 return []
         return []
 
-# Схема для создания статьи
 class ArticleCreate(ArticleBase):
     pass
 
-# Схема для обновления данных статьи
 class ArticleUpdate(BaseModel):
     name: Optional[str]
     short_description: Optional[str]
@@ -277,7 +259,6 @@ class ArticleUpdate(BaseModel):
     images: Optional[List[str]]
     tags: Optional[List[str]]
 
-# Схема статьи для ответа
 class ArticleOut(BaseModel):
     id: int
     #name: str
@@ -291,7 +272,6 @@ class ArticleOut(BaseModel):
     class Config:
         from_attributes = True
         
-# Добавьте упрощённые схемы для связей
 class ProductCategoryOut(BaseModel):
     id: int
     name: str

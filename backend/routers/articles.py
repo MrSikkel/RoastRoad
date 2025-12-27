@@ -8,7 +8,6 @@ from auth import get_current_user
 
 router = APIRouter(prefix="/articles", tags=["articles"])
 
-# Эндпоинт для получения статей
 @router.get("", response_model=List[ArticleOut])
 def list_latest_articles(db: Session = Depends(get_db)):
     try:
@@ -22,7 +21,6 @@ def list_latest_articles(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-# Эндпоинт для получения статьи по id
 @router.get("/{article_id}", response_model=ArticleOut)
 def get_article(article_id: int, db: Session = Depends(get_db)):
     try:
@@ -39,7 +37,6 @@ def get_article(article_id: int, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-# Эндпоинт для создания новой статьи
 @router.post("", response_model=ArticleOut, status_code=status.HTTP_201_CREATED)
 def create_new_article(
     article_data: ArticleCreate,
@@ -58,7 +55,6 @@ def create_new_article(
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-# Эндпоинт для обновления статьи по id
 @router.put("/{article_id}", response_model=ArticleOut)
 def update__article(
     article_id: int, 
@@ -78,7 +74,6 @@ def update__article(
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-# Эндпоинт для удаления статьи по id
 @router.delete("/{article_id}")
 def remove_article(
     article_id: int,

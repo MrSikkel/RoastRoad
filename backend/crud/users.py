@@ -5,7 +5,6 @@ from schemas import UserRegister, UserAddressCreate, ChangePassword, UserUpdate
 from auth import get_password_hash, verify_password
 from fastapi import HTTPException, status
 
-# Функция для получения пользователя по email адресу
 def get_user_by_email(db: Session, email: str) -> Optional[User]:
     try:
         return db.query(User).filter(User.email == email).first()
@@ -15,7 +14,6 @@ def get_user_by_email(db: Session, email: str) -> Optional[User]:
             detail=f"Ошибка в базе данных: {str(e)}"
         )
 
-# Функция для получения пользователя по ID
 def get_user_by_id(db: Session, user_id: int) -> Optional[User]:
     try:
         return db.query(User).filter(User.id == user_id).first()
@@ -25,7 +23,6 @@ def get_user_by_id(db: Session, user_id: int) -> Optional[User]:
             detail=f"Ошибка в базе данных: {str(e)}"
         )
 
-# Функция для создания нового пользователя в базе данных
 def create_user(db: Session, user_data: UserRegister) -> User:
     try:
         db_user = get_user_by_email(db, email=user_data.email)
@@ -62,7 +59,6 @@ def create_user(db: Session, user_data: UserRegister) -> User:
             detail=f"Ошибка при создании пользователя: {str(e)}"
         )
 
-# Функция для аутентификации пользователя
 def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
     try:
         user = get_user_by_email(db, email)
@@ -77,7 +73,6 @@ def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
             detail=f"Ошибка аутентификации: {str(e)}"
         )
 
-# Функция для обновления пароля пользователя
 def update_user_password(
     db: Session,
     user_id: int,
@@ -113,7 +108,6 @@ def update_user_password(
             detail=f"Ошибка при сбросе пароля: {str(e)}"
         )
 
-# Функция для получения профиля пользователя по его ID
 def get_user_profile(db: Session, user_id: int) -> dict:
     try:
         user = get_user_by_id(db, user_id)
@@ -143,7 +137,6 @@ def get_user_profile(db: Session, user_id: int) -> dict:
             detail=f"Ошибка при получении профиля: {str(e)}"
         )
 
-# Функция для обновления данных профиля пользователя
 def update_user_profile(
     db: Session, 
     user_id: int,
@@ -178,7 +171,6 @@ def update_user_profile(
             detail=f"Ошибка при обновлении профиля: {str(e)}"
         )
 
-# Функция для создания нового адреса пользователя
 def create_user_address(
     db: Session, 
     address: UserAddressCreate, 
@@ -202,7 +194,6 @@ def create_user_address(
             detail=f"Ошибка при создании адреса: {str(e)}"
         )
 
-# Функция для получения всех адресов пользователя по его ID
 def get_user_addresses(db: Session, user_id: int) -> List[User_address]:
     try:
         return db.query(User_address).filter(

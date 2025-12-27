@@ -18,15 +18,12 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
 
-# Функция для проверки соответствия пароля и его хеша
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
-# Функция для создания хеша пароля
 def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
-# Функция для создания JWT access токена
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
     if expires_delta:
@@ -37,7 +34,6 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-# Функция для верификации JWT токена
 def verify_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -54,7 +50,6 @@ def verify_token(token: str):
             detail="Не удалось подтвердить учетные данные"
             )
 
-# Функция для получения текущего пользователя из JWT токена
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db)

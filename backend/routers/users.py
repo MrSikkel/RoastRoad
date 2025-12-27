@@ -8,7 +8,6 @@ from auth import get_current_user
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-# Эндпоинт для получения профиля пользователя по email
 @router.get("/lk", response_model=UserProfile)
 def get_profile(current_user = Depends(get_current_user), db: Session = Depends(get_db)):
     try:
@@ -24,7 +23,6 @@ def get_profile(current_user = Depends(get_current_user), db: Session = Depends(
             detail=f"Ошибка при получении профиля: {str(e)}"
         )
 
-# Эндпоинт для обновления профиля текущего пользователя
 @router.put("/profile", response_model=UserProfile)
 def update_profile(
     user_data: UserUpdate,
@@ -46,7 +44,6 @@ def update_profile(
             detail=f"Ошибка при обновлении профиля: {str(e)}"
         )
 
-# Эндпоинт для получение адресов пользователя
 @router.get("/addresses", response_model=list[UserAddress])
 def get_addresses(
     current_user = Depends(get_current_user),
@@ -63,7 +60,6 @@ def get_addresses(
             detail=f"Ошибка при получении адресов: {str(e)}"
         )
 
-# Эндпоинт для создания нового адреса пользователя
 @router.post("/addresses", response_model=UserAddress, status_code=status.HTTP_201_CREATED)
 def create_address(
     address: UserAddressCreate,

@@ -8,7 +8,6 @@ from auth import get_current_user
 
 router = APIRouter(prefix="/products", tags=["products"])
 
-# Эндпоинт для получения продуктов
 @router.get("", response_model=List[ProductOut])
 def list_products(
     skip: int = Query(0, ge=0),
@@ -28,7 +27,6 @@ def list_products(
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-# Эндпоинт для получения продукта по id
 @router.get("/{product_id}", response_model=ProductOut)
 def get_product(product_id: int, db: Session = Depends(get_db)):
     try:
@@ -45,7 +43,6 @@ def get_product(product_id: int, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-# Эндпоинт для создания нового продукта
 @router.post("", response_model=ProductOut, status_code=status.HTTP_201_CREATED)
 def create_new_product(
     product_data: ProductCreate,
@@ -64,7 +61,6 @@ def create_new_product(
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-# Эндпоинт для обновления продукта по id
 @router.put("/{product_id}", response_model=ProductOut)
 def update__product(
     product_id: int, 
@@ -84,7 +80,6 @@ def update__product(
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-# Эндпоинт для удаления продукта по id
 @router.delete("/{product_id}")
 def remove_product(
     product_id: int,

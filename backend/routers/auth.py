@@ -9,7 +9,6 @@ from auth import create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_u
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
 
-# "Эндпоинт для обработки запросов аутентификации
 @router.post("/register", status_code=status.HTTP_201_CREATED)
 def register(user_data: UserRegister, db: Session = Depends(get_db)):
     try:
@@ -28,7 +27,6 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
             detail=f"Ошибка при создании пользователя: {str(e)}"
         )
 
-# Эндпоинт для входа пользователя в систему
 @router.post("/login", response_model=Token)
 def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -92,7 +90,6 @@ def login_json(
             detail=f"Ошибка входа в систему: {str(e)}"
         )
 
-# Эндпоинт для изменения пароля пользователя
 @router.post("/change-password")
 def change_password(
     password_data: ChangePassword,
