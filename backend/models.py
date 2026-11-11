@@ -2,12 +2,12 @@ from sqlalchemy import Column, Integer, String, Enum, DateTime, func, ForeignKey
 from database import Base
 from sqlalchemy.orm import relationship
 import enum
+import json
 
 class Role(enum.Enum):
     user = "user"
     admin = "admin"
 
-"""
 # Методы оплаты
 class Payment_method(enum.Enum):
     card = "card"
@@ -21,7 +21,6 @@ class Order_status(enum.Enum):
     shipped = "shipped"
     delivered = "delivered"
     cancelled = "cancelled"
-"""
 class User(Base):
     __tablename__ = "user"
     
@@ -39,8 +38,8 @@ class User(Base):
     reviews = relationship("Review", back_populates="user")
     articles = relationship("Article", back_populates="author")
     comments = relationship("Article_comment", back_populates="user")
-    #cart = relationship("Cart", back_populates="user", uselist=False)
-    #orders = relationship("Order", back_populates="user")
+    cart = relationship("Cart", back_populates="user", uselist=False)
+    orders = relationship("Order", back_populates="user")
 
 class User_address(Base):
     __tablename__ = "user_address"
@@ -55,7 +54,7 @@ class User_address(Base):
     is_current = Column(Boolean, default=True)
     
     user = relationship("User", back_populates="addresses")
-    #orders = relationship("Order", back_populates="address")
+    orders = relationship("Order", back_populates="address")
 
 
 class Product(Base):
@@ -74,9 +73,8 @@ class Product(Base):
     #category = relationship("Product_category", back_populates="products")
     category = relationship("Product_category", back_populates="products", lazy="select")
     reviews = relationship("Review", back_populates="product")
-    #cart_items = relationship("Cart_item", back_populates="product")
-    #order_items = relationship("Order_item", back_populates="product")
-    """
+    cart_items = relationship("Cart_item", back_populates="product")
+    order_items = relationship("Order_item", back_populates="product")
     def get_specifications(self):
         if self.specifications:
             try:
@@ -93,7 +91,7 @@ class Product(Base):
         return specs.get(key, default)
     
     def get_images(self):
-        #Получить изображения как Python список"
+        #Получить изображения как Python список
         return self.images or []
     
     def add_image(self, image_url):
@@ -107,7 +105,6 @@ class Product(Base):
         #Удалить изображение
         if self.images and image_url in self.images:
             self.images.remove(image_url)
-    """
 
 class Product_category(Base):
     __tablename__ = "product_category"
@@ -148,7 +145,6 @@ class Article(Base):
     
     author = relationship("User", back_populates="articles")
     comments = relationship("Article_comment", back_populates="article")
-    """
     def get_images(self):
         #Получить изображения как Python список
         return self.images or []
@@ -156,7 +152,6 @@ class Article(Base):
     def get_tags(self):
         #Получить теги как Python список
         return self.tags or []
-    """
 
 class Article_comment(Base):
     __tablename__ = "article_comment"
@@ -170,7 +165,6 @@ class Article_comment(Base):
     user = relationship("User", back_populates="comments")
     article = relationship("Article", back_populates="comments")
 
-""" 
 # Корзина
 class Cart(Base):
     __tablename__ = "cart"
@@ -223,4 +217,3 @@ class Order_item(Base):
     
     order = relationship("Order", back_populates="items")
     product = relationship("Product", back_populates="order_items")
-"""

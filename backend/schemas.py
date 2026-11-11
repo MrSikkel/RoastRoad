@@ -215,14 +215,8 @@ class ProductUpdate(ProductBase):
     name: Optional[str] = None
     price: Optional[Decimal] = None
 
-class ProductOut(BaseModel):
+class ProductOut(ProductBase):
     id: int
-    #name: str
-    #description: Optional[str]
-    #price: Decimal
-    #category_id: Optional[int]
-    #images: Optional[List[str]]
-    #specifications: Optional[dict]
     created_at: datetime
 
     class Config:
@@ -259,13 +253,8 @@ class ArticleUpdate(BaseModel):
     images: Optional[List[str]]
     tags: Optional[List[str]]
 
-class ArticleOut(BaseModel):
+class ArticleOut(ArticleBase):
     id: int
-    #name: str
-    #short_description: str
-    #content: str
-    #images: Optional[List[str]]
-    #tags: Optional[List[str]]
     author_id: int
     created_at: datetime
 
